@@ -1,0 +1,123 @@
+package com.mycompany.movies;
+
+import com.mycompany.movies.lists.Film;
+
+import java.util.ArrayList;
+import java.util.Scanner;
+
+/**
+ *
+ * @author yusri
+ */
+public final class main {
+    private static final ArrayList<Film> library = new ArrayList<>();
+    private static final Scanner scanner = new Scanner(System.in);
+
+    public static void main(String[] args) {
+        int choice;
+        do {
+            System.out.println("Library Film - Menu:");
+            System.out.println("1. Tambah Film");
+            System.out.println("2. Lihat Daftar Film");
+            System.out.println("3. Update Film");
+            System.out.println("4. Hapus Film");
+            System.out.println("5. Keluar");
+            choice = scanner.nextInt();
+
+            switch (choice) {
+                case 1:
+                    addMovie();
+                    break;
+                case 2:
+                    viewMovies();
+                    break;
+                case 3:
+                    updateMovie();
+                    break;
+                case 4:
+                    deleteMovie();
+                    break;
+                case 5:
+                    System.out.println("Terima kasih!");
+                    break;
+                default:
+                    System.out.println("Pilihan tidak valid.");
+            }
+        } while (choice != 5);
+    }
+
+    private static void addMovie() {
+        System.out.println("Tambah Film");
+        System.out.print("Judul: ");
+        String title = scanner.next();
+
+        System.out.print("Sutradara: ");
+        String director = scanner.next();
+
+        System.out.println("Tahun Rilis: ");
+        int year = scanner.nextInt();
+
+        Film newFilm = new Film(library.size() + 1, title, director, year);
+        library.add(newFilm);
+
+        System.out.println("Film berhasil ditambahkan!");
+    }
+
+    private static void viewMovies() {
+        System.out.println("Daftar Film:");
+        for (Film film : library) {
+            System.out.println("ID: " + film.getId());
+            System.out.println("Judul: " + film.getTitle());
+            System.out.println("Sutradara: " + film.getDirector());
+            System.out.println("Tahun Rilis: " + film.getYear());
+            System.out.println();
+        }
+    }
+
+    private static void updateMovie() {
+        System.out.print("Masukkan ID Film yang ingin diupdate: ");
+        int idToUpdate = scanner.nextInt();
+        Film filmToUpdate = findMovieById(idToUpdate);
+
+        if (filmToUpdate != null) {
+            System.out.print("Judul Baru: ");
+            String newTitle = scanner.next();
+
+            System.out.print("Sutradara Baru: ");
+            String newDirector = scanner.next();
+
+            System.out.print("Tahun Rilis Baru: ");
+            int newYear = scanner.nextInt();
+
+            filmToUpdate.setTitle(newTitle);
+            filmToUpdate.setDirector(newDirector);
+            filmToUpdate.setYear(newYear);
+
+            System.out.println("Film berhasil diupdate!");
+        } else {
+            System.out.println("Film dengan ID " + idToUpdate + " tidak ditemukan.");
+        }
+    }
+
+    private static void deleteMovie() {
+        System.out.print("Masukkan ID Film yang ingin dihapus: ");
+        int idToDelete = scanner.nextInt();
+        Film filmToDelete = findMovieById(idToDelete);
+
+        if (filmToDelete != null) {
+            library.remove(filmToDelete);
+            System.out.println("Film berhasil dihapus!");
+        } else {
+            System.out.println("Film dengan ID " + idToDelete + " tidak ditemukan.");
+        }
+    }
+
+    private static Film findMovieById(int id) {
+        for (Film film : library) {
+            if (film.getId() == id) {
+                return film;
+            }
+        }
+        return null;
+    }
+}
